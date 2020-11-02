@@ -16,11 +16,11 @@ df0 = pd.read_csv("https://github.com/Redwoods/Py/raw/master/pdm2020/my-note/py-
 # 2. Replace zero with NaN 
 # 3. Replace NaN with the median of the corresponding featurs
 def zero2median(df):
-    columns_with_zero = df.columns[(df==0).sum() > 0][1:-1]
+    columns_with_zero = df.columns[(df==0).sum() > 0][1:-1]//outcome항목을 뺀다(0이 포함될수있는 항목,임신횟수가 빠진다)
     # Index(['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI'], dtype='object')
-    df[columns_with_zero]=df[columns_with_zero].replace(0,np.nan)
+    df[columns_with_zero]=df[columns_with_zero].replace(0,np.nan)//5개항모에서 0을 none으로 바꿔준다
     for feature in columns_with_zero:
-        df[feature].fillna(df[feature].median(),inplace=True)
+        df[feature].fillna(df[feature].median(),inplace=True)//none을 뒤에 있는 항목값으로 바꿔준다
     
     return df
 
@@ -39,7 +39,7 @@ st.sidebar.write('diabetes(DM):',DB)
 # plotly batchart
 # https://towardsdatascience.com/step-by-step-bar-charts-using-plotly-express-bb13a1264a8b
 df1 = df.groupby(["Outcome"]).count().reset_index()
-fig0 = px.bar(df1, 
+fig0 = px.bar(df1,                              //플롯기반의 바그래프가들어간다(왼쪽)
               y=df.groupby(["Outcome"]).size(),
               x="Outcome", 
               width=350, height=300, 
@@ -47,7 +47,7 @@ fig0 = px.bar(df1,
               color='Outcome', 
               color_discrete_map=dict(noDM = 'green', DM = 'red'))
 st.sidebar.write(fig0)
-# pi-chart
+# pi-chart                                  //원형그래프가 들어간다
 fig1=px.pie(df, values=df.Outcome.value_counts(), 
             width=350, height=300, 
             names=['noDM','DM'], color=['noDM','DM'], 
